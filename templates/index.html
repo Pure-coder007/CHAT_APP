@@ -1,3 +1,5 @@
+{% from "form_helper.html" import displayField %}
+
 {% extends "prelogin_layout.html" %}
 
 {% block title %}Registration{% endblock %} 
@@ -5,37 +7,13 @@
 {% block body %}
     <h1>Get Started</h1>
     <form action="{{ url_for('index') }}" method="POST">
-        <div>
-            {{ form.username(class_='form-control', placeholder='Username', autocomplete="off", autofocus=true) }}
+        
 
-            <!-- Checking for errors -->
-            <ul>
-                {% for error in form.username.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+        {{ displayField(form.username, 'Username', autocomplete="off", autofocus=true) }}
+        {{ displayField(form.password, 'Password') }}
+        {{ displayField(form.confirm_pswd, 'Confirm Password') }}
 
-        <div>
-            {{ form.password(class_='form-control', placeholder='Password') }}
-                <!-- Checking for errors -->
-            <ul>
-                {% for error in form.password.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
 
-        <div>
-            {{ form.confirm_pswd(class_='form-control', placeholder='Confirm Password') }}
-
-            <!-- Checking for errors -->
-            <ul>
-                {% for error in form.confirm_pswd.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
         <div>
             {{ form.submit_button }}
         </div>
