@@ -1,18 +1,38 @@
 from flask import Flask, render_template
 from wtform_fields import *
+from models import * 
+from models import db
+from mysql.connector import Error
+# import mysql.connector
 
 
 
 # Configure app
 app = Flask(__name__)
 app.secret_key = 'super secret key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:language007@localhost/chat'
 
+# db = SQLAlchemy(app)
+
+db.init_app(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     reg_form = RegistrationForm()
     if  reg_form.validate_on_submit():
-        return "Great success"  
+        username = reg_form.username.data
+        password = reg_form.password.data
+
+        # Check if username already exists
+        user = User.query.filter_by(username=username).first()
+        if user:
+            return "Someone else has taken this username!"
+        
+        # Adding user to database
+        user = User(username=username, password=password)
+        db.session.add(user)
+        db.session.commit()
+        return f"User {username} added successfully!"
     
     return render_template('index.html', form=reg_form)
 
